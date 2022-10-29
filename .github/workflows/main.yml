@@ -1,0 +1,40 @@
+name: Deploy Master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  firebase-deploy:
+    runs-on: ubuntu-latest
+    env:
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_HOST: ${{secrets.DB_HOST}}
+    steps:
+      - uses: actions/checkout@master
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@master
+        with:
+          node-version: '14.x'
+      - name: create env file in /
+        run: |
+          touch .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+      - name: install libraries
+        run: npm install
+      - name: install firebase
+        run: npm i firebase-tools firebase-admin firebase -g
+      - name: build
+        run: npm run build
+      - name: set project
+        run: firebase use --add "foleon" --token=${{ secrets.FIREBASE_TOKEN }}
+      - name: deploy master
+        run: firebase deploy --only functions --token=${{ secrets.FIREBASE_TOKEN }}
