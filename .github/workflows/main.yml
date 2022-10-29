@@ -35,6 +35,6 @@ jobs:
       - name: build
         run: npm run build
       - name: set project
-        run: firebase use --add "foleon" --token=${{ secrets.FIREBASE_TOKEN }}
+        run: firebase use --add "foleon-88612" --token=${{ secrets.FIREBASE_TOKEN }}
       - name: deploy master
         run: firebase deploy --only functions --token=${{ secrets.FIREBASE_TOKEN }}
