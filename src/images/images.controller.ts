@@ -7,11 +7,13 @@ import {
   Body,
   Param,
   ParseIntPipe,
-} from '@nestjs/common';
-import { CreateImageDto, UpdateImageDto } from './images.dto';
-import { ImagesService } from './images.service';
+  HttpException,
+  HttpStatus,
+} from "@nestjs/common";
+import { CreateImageDto, UpdateImageDto } from "./images.dto";
+import { ImagesService } from "./images.service";
 
-@Controller('images')
+@Controller("images")
 export class ImagesController {
   constructor(private imagesService: ImagesService) {}
   @Get()
@@ -19,8 +21,8 @@ export class ImagesController {
     return this.imagesService.findAll();
   }
 
-  @Get(':id')
-  findById(@Param('id', ParseIntPipe) id: number) {
+  @Get(":id")
+  findById(@Param("id", ParseIntPipe) id: number) {
     return this.imagesService.findById(id);
   }
 
@@ -29,16 +31,23 @@ export class ImagesController {
     return this.imagesService.create(createImageDto);
   }
 
-  @Put(':id')
+  @Put(":id")
   updateById(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateImageDto: UpdateImageDto,
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateImageDto: UpdateImageDto
   ) {
-    this.imagesService.updateById(id, updateImageDto);
+    if (!(updateImageDto.name && updateImageDto.url))
+      throw new HttpException(
+        {
+          error_message: `unvalid payload`,
+        },
+        HttpStatus.BAD_REQUEST
+      );
+    return this.imagesService.updateById(id, updateImageDto);
   }
 
-  @Delete(':id')
-  async deleteImage(@Param('id', ParseIntPipe) id: number) {
-    await this.imagesService.deleteById(id);
+  @Delete(":id")
+  deleteById(@Param("id", ParseIntPipe) id: number) {
+    return this.imagesService.deleteById(id);
   }
 }

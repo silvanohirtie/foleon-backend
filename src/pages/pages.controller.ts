@@ -7,11 +7,11 @@ import {
   Body,
   Param,
   ParseIntPipe,
-} from '@nestjs/common';
-import { CreatePageDto, UpdatePageDto } from './pages.dto';
-import { PagesService } from './pages.service';
+} from "@nestjs/common";
+import { CreatePageDto, UpdatePageDto } from "./pages.dto";
+import { PagesService } from "./pages.service";
 
-@Controller('pages')
+@Controller("pages")
 export class PagesController {
   constructor(private pagesService: PagesService) {}
   @Get()
@@ -19,8 +19,8 @@ export class PagesController {
     return this.pagesService.findAll();
   }
 
-  @Get(':id')
-  findById(@Param('id', ParseIntPipe) id: number) {
+  @Get(":id")
+  findById(@Param("id", ParseIntPipe) id: number) {
     return this.pagesService.findById(id);
   }
 
@@ -29,16 +29,16 @@ export class PagesController {
     return this.pagesService.create(createPageDto);
   }
 
-  @Put(':id')
-  async updateById(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updatePageDto: UpdatePageDto,
+  @Put(":id")
+  updateById(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updatePageDto: UpdatePageDto
   ) {
-    await this.pagesService.updateById(id, updatePageDto);
+    return this.pagesService.updateById(id, updatePageDto);
   }
 
-  @Delete(':id')
-  async deleteById(@Param('id', ParseIntPipe) id: number) {
-    await this.pagesService.deleteById(id);
+  @Delete(":id")
+  deleteById(@Param("id", ParseIntPipe) id: number) {
+    return this.pagesService.deleteById(id);
   }
 }

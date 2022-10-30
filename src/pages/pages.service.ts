@@ -1,12 +1,12 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Page } from '../typeorm/entities/Page';
-import { CreatePageDto, UpdatePageDto } from './pages.dto';
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Page } from "../typeorm/entities/Page";
+import { CreatePageDto, UpdatePageDto } from "./pages.dto";
 @Injectable()
 export class PagesService {
   constructor(
-    @InjectRepository(Page) private pageRepository: Repository<Page>,
+    @InjectRepository(Page) private pageRepository: Repository<Page>
   ) {}
   findAll() {
     return this.pageRepository.find({});
@@ -16,7 +16,7 @@ export class PagesService {
     if (!page)
       throw new HttpException(
         { error_message: `Page was not found` },
-        HttpStatus.NOT_FOUND,
+        HttpStatus.NOT_FOUND
       );
     return page;
   }
