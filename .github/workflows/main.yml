@@ -32,6 +32,8 @@ jobs:
         run: npm install
       - name: install firebase
         run: npm i firebase-tools firebase-admin firebase -g
+      - name: Tests
+        run: npm run test
       - name: build
         run: npm run build
       - name: set project
